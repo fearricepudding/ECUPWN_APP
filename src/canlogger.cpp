@@ -10,7 +10,7 @@ CanLogger::CanLogger(QWidget *parent)
     connect(ui->stateToggle, SIGNAL(clicked()), this, SLOT(addTest()));
 
     this->counter = 0;
-    this->scrollLimit = 200;
+    this->scrollLimit = 100;
 }
 
 void CanLogger::addTest(){
