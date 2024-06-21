@@ -36,6 +36,10 @@ void CanLogger::renderCanLogs(){
 }
 
 void CanLogger::newData(QString newString){
+    if(this->canMessages.size() > this->scrollLimit){
+        this->canMessages.erase(this->canMessages.begin(), this->canMessages.end()-this->scrollLimit);
+    };
+
     this->canMessages.push_back(newString.toStdString());
     this->renderCanLogs();
 }
