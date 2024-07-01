@@ -26,6 +26,10 @@ void CanWorker::requestWork()
     emit workRequested();
 }
 
+int CanWorker::joinCanNetwork(){
+    _candy->setup();
+}
+
 void CanWorker::abort()
 {
     mutex.lock();
@@ -46,6 +50,9 @@ void CanWorker::doWork()
         mutex.lock();
         bool abort = _abort;
         mutex.unlock();
+        if(abort){
+            break;
+        }
 
         can_frame frame = _candy->recieve();
         std::stringstream userReadable;
@@ -56,14 +63,14 @@ void CanWorker::doWork()
         int i = 0;
         for(i = 0; i < 8; i++){
             //printf("data[%d] = %d\r\n", i, frame.data[i]);
-	    int dataI  = frame.data[i];
-	    std::cout << "data[" << i << "] = [" << std::hex << dataI << "]" << std::endl;
-	    userReadable << std::hex << dataI << " ";
-	};
+            int dataI  = frame.data[i];
+            std::cout << "data[" << i << "] = [" << std::hex << dataI << "]" << std::endl;
+            userReadable << std::hex << dataI << " ";
+        };
 
-	userReadable << "]";
+        userReadable << "]";
 
-	std::cout << userReadable.str() << std::endl;
+        std::cout << userReadable.str() << std::endl;
 	
 
         // Once we're done waiting, value is updated

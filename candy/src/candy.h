@@ -12,7 +12,7 @@ public:
     ~Candy();
     can_frame recieve();
     int send();
-
+    void setup();
 
 private:
     int setupCanLink();

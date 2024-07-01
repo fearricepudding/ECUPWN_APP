@@ -21,6 +21,7 @@ private slots:
     void can_logger();
     void connect_settings();
     void connection_thread(int);
+    void connectToCan();
 
 public:
     Splash(QWidget *parent = nullptr);
@@ -29,10 +30,8 @@ public:
 private:
     Ui::Splash *ui;
     QThread *thread;
-    /**
-     * @brief Object which contains methods that should be runned in another thread
-     */
     CanWorker *worker; 
+    ConnectionSettings *connectionSettings;
 
 };
 #endif // SPLASH_H

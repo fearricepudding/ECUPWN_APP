@@ -14,8 +14,12 @@
 Candy::Candy(){
     std::cout << "[*] Starting candy" << std::endl;
 
-    this->setupCanLink(); 
+//    this->setupCanLink(); 
 };
+
+void Candy::setup(){
+    this->setupCanLink();
+}
 
 Candy::~Candy(){
     this->closeCanLink();
@@ -61,8 +65,6 @@ void Candy::closeCanLink(){
     close(this->s);
     system("sudo ifconfig can0 down");
 }
-
-
 
 can_frame Candy::recieve()
 {

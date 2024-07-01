@@ -10,7 +10,7 @@ ConnectionSettings::ConnectionSettings(QWidget *parent)
 {
     ui->setupUi(this);
     
-    connect(ui->test, SIGNAL(clicked()), this, SLOT(test()));
+    connect(ui->connectBtn, SIGNAL(clicked()), this, SLOT(test()));
 }
 
 ConnectionSettings::~ConnectionSettings()
@@ -19,6 +19,12 @@ ConnectionSettings::~ConnectionSettings()
 
 }
 
+void ConnectionSettings::updateStatus(char* status){
+    ui->status->setText(status);
+}
+
 void ConnectionSettings::test(){
-    emit startCanThread(10000);
+    ui->status->setText("Connecting...");
+    //emit startCanThread(10000);
+    emit joinCanNetwork();
 }

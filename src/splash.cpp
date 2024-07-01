@@ -15,8 +15,7 @@ Splash::Splash(QWidget *parent)
     thread = new QThread();
     worker = new CanWorker();
     worker->moveToThread(thread);
-
-
+    
     connect(worker, SIGNAL(workRequested()), thread, SLOT(start()));
     connect(thread, SIGNAL(started()), worker, SLOT(doWork()));
     connect(worker, SIGNAL(finished()), thread, SLOT(quit()), Qt::DirectConnection);
@@ -50,12 +49,25 @@ void Splash::can_logger(){
 }
 
 void Splash::connect_settings(){
-
-    ConnectionSettings *connectionSettings = new ConnectionSettings();
-
-    connect(connectionSettings, SIGNAL(startCanThread(int)), this, SLOT(connection_thread(int)));
-    connectionSettings->show();
+    this->connectionSettings = new ConnectionSettings();
+    connect(this->connectionSettings, SIGNAL(startCanThread(int)), this, SLOT(connection_thread(int)));
+    connect(this->connectionSettings, SIGNAL(joinCanNetwork()), this, SLOT(connectToCan()));
+    this->connectionSettings->show();
 }
+
+void Splash::connectToCan(){
+    int result = worker->joinCanNetwork();
+    if(result != 0){
+        this->connectionSettings->updateStatus("Failed to setup CAN network");
+        ui->connectBtn->setText("ERROR");
+        return;
+    };
+    this->connectionSettings->updateStatus("Connected");
+    ui->connectBtn->setText("CONNECTED");
+    ui->connectBtn->setProperty("connected", "1");
+    ui->connectBtn->style()->unpolish(ui->connectBtn);
+    ui->connectBtn->style()->polish(ui->connectBtn);
+};
 
 void Splash::connection_thread(int bitrate){
     worker->abort();

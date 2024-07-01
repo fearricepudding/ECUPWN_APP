@@ -16,10 +16,12 @@ private slots:
 
 signals:
     void startCanThread(int);
+    void joinCanNetwork();
 
 public:
     explicit ConnectionSettings(QWidget *parent = nullptr);
     ~ConnectionSettings();
+    void updateStatus(char*);
 
 private:
     Ui::ConnectionSettings *ui;
