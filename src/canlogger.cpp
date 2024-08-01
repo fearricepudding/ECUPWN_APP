@@ -14,7 +14,7 @@ CanLogger::CanLogger(QWidget *parent)
 }
 
 void CanLogger::remoteStartLog(){
-    qDebug() << "Sending startLog";
+    qDebug()<<"Sending startLog";
     emit startLog();
 }
 
