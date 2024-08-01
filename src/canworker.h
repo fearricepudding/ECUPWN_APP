@@ -5,7 +5,6 @@
 #include "../candy/src/candy.h"
 #include <linux/can.h>
 #include <linux/can/raw.h>
-#
 
 struct can_frame;
 
@@ -18,13 +17,15 @@ public:
     void requestWork();
     void abort();
     int joinCanNetwork();
+    void shutdown();
+    std::vector<can_frame> getBuffer();
 
 private:
     bool _abort;
     bool _working;
-    QMutex mutex;
+    QMutex _mutex;
     Candy *_candy;
-    std::vector<can_frame> frameBuffer;
+    std::vector<can_frame> _frameBuffer;
 
 signals:
     void workRequested();

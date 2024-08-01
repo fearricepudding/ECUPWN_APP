@@ -1,4 +1,3 @@
-#include "candy.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,24 +7,40 @@
 #include <sys/socket.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
-
+#include <string>
 #include <iostream>
 
-Candy::Candy(){
-    std::cout << "[*] Starting candy" << std::endl;
+#include "candy.h"
 
-//    this->setupCanLink(); 
+Candy::Candy() {
+    std::cout << "[*] Starting candy" << std::endl;
+    this->error = "";
+    this->_connected = false;
+
 };
 
-void Candy::setup(){
-    this->setupCanLink();
-}
-
-Candy::~Candy(){
+Candy::~Candy() {
     this->closeCanLink();
 };
 
-int Candy::setupCanLink(){
+void Candy::setup() {
+    std::cout << "[*] Starting can link" << std::endl;
+    int status = this->setupCanLink();
+    if(status != 0){
+        std::cout << this->error << std::endl;
+    };
+};
+
+void Candy::shutdown() {
+    std::cout << "[*] Closing can link" << std::endl;
+    this->closeCanLink();
+};
+
+std::string Candy::getError() {
+    return this->error;
+};
+
+int Candy::setupCanLink() {
     struct sockaddr_can addr;
     struct ifreq ifr;
     int ret;
@@ -37,37 +52,39 @@ int Candy::setupCanLink(){
     this->s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
     if (this->s < 0) {
-        perror("socket PF_CAN failed");
+        this->error = "Socket failure";
         return 1;
-    }
+    };
 
-    //2.Specify can0 device
     strcpy(ifr.ifr_name, "can0");
     ret = ioctl(this->s, SIOCGIFINDEX, &ifr);
     if (ret < 0) {
-        perror("ioctl failed");
+        this->error = "Device failure";
         return 1;
-    }
+    };
 
-    //3.Bind the socket to can0
     addr.can_family = PF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
     ret = bind(this->s, (struct sockaddr *)&addr, sizeof(addr));
     if (ret < 0) {
-        perror("bind failed");
+        this->error = "Bind failure";
         return 1;
-    }
+    };
 
+    this->_connected = true;
     return 0;
 }
 
-void Candy::closeCanLink(){
+void Candy::closeCanLink() {
     close(this->s);
     system("sudo ifconfig can0 down");
-}
+};
 
-can_frame Candy::recieve()
-{
+bool Candy::isConnected(){
+    return this->_connected;
+};
+
+can_frame Candy::recieve() {
     std::cout << "Listening for can data" << std::endl;
     int nbytes;
     struct can_frame frame;
@@ -80,7 +97,6 @@ can_frame Candy::recieve()
     //rfilter[0].can_mask = CAN_SFF_MASK;
     //setsockopt(this->s, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
 
-    //5.Receive data and return
     while(1) {
         nbytes = read(this->s, &frame, sizeof(frame));
         if(nbytes > 0) {
@@ -93,7 +109,7 @@ can_frame Candy::recieve()
     };
 };
 
-int Candy::send(){
+int Candy::send() {
     int nbytes;
     struct can_frame frame;
     memset(&frame, 0, sizeof(struct can_frame));

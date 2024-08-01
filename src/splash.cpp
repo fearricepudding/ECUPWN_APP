@@ -34,6 +34,7 @@ Splash::~Splash()
 
 void Splash::exit_app()
 {
+    this->worker->shutdown();
     QApplication::exit();
 }
 
@@ -58,11 +59,11 @@ void Splash::connect_settings(){
 void Splash::connectToCan(){
     int result = worker->joinCanNetwork();
     if(result != 0){
-        this->connectionSettings->updateStatus("Failed to setup CAN network");
+        this->connectionSettings->updateStatus((char*) "Failed to setup CAN network");
         ui->connectBtn->setText("ERROR");
         return;
     };
-    this->connectionSettings->updateStatus("Connected");
+    this->connectionSettings->updateStatus((char*) "Connected");
     ui->connectBtn->setText("CONNECTED");
     ui->connectBtn->setProperty("connected", "1");
     ui->connectBtn->style()->unpolish(ui->connectBtn);

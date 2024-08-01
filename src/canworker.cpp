@@ -8,61 +8,68 @@
 #include "../candy/src/candy.h"
 
 CanWorker::CanWorker(QObject *parent) :
-    QObject(parent)
-{
-    _working =false;
-    _abort = false;
-    _candy = new Candy();
+    QObject(parent) {
+    this->_working =false;
+    this->_abort = false;
+    this->_candy = new Candy();
 }
 
-void CanWorker::requestWork()
-{
-    mutex.lock();
-    _working = true;
-    _abort = false;
-    qDebug()<<"Request worker start in Thread "<<thread()->currentThreadId();
-    mutex.unlock();
+void CanWorker::shutdown() {
+    this->_candy->shutdown();
+};
 
+void CanWorker::requestWork() {
+    this->_mutex.lock();
+    this->_working = true;
+    this->_abort = false;
+    qDebug()<<"Request worker start in Thread "<<thread()->currentThreadId();
+    this->_mutex.unlock();
     emit workRequested();
 }
 
-int CanWorker::joinCanNetwork(){
-    _candy->setup();
-}
+int CanWorker::joinCanNetwork() {
+    this->_candy->setup();
+    if(this->_candy->isConnected()){
+        return 0;
+    };
+    return 1;
+};
 
-void CanWorker::abort()
-{
-    mutex.lock();
+void CanWorker::abort() {
+    this->_mutex.lock();
     if (_working) {
-        _abort = true;
+        this->_abort = true;
         qDebug()<<"Request worker aborting in Thread "<<thread()->currentThreadId();
     }
-    mutex.unlock();
+    this->_mutex.unlock();
 }
 
+std::vector<can_frame> CanWorker::getBuffer(){
+    std::vector<can_frame> buffer;
+    this->_mutex.lock();
+    buffer = this->_frameBuffer;
+    this->_mutex.unlock();
+    return buffer;
+};
 
-void CanWorker::doWork()
-{
+void CanWorker::doWork() {
     qDebug()<<"Starting worker process in Thread "<<thread()->currentThreadId();
-
-    while(1){
-       // Checks if the process should be aborted
-        mutex.lock();
-        bool abort = _abort;
-        mutex.unlock();
-        if(abort){
+    while(1) {
+        this->_mutex.lock();
+        bool abort = this->_abort;
+        this->_mutex.unlock();
+        if(abort) {
             break;
-        }
+        };
 
-        can_frame frame = _candy->recieve();
+        can_frame frame = this->_candy->recieve();
         std::stringstream userReadable;
 
-        printf("can_id = 0x%X\r\ncan_dlc = %d \r\n", frame.can_id, frame.can_dlc);
+        std::cout << std::hex << frame.can_id << " : " << std::dec << frame.can_dlc << " ";
         userReadable << std::hex << frame.can_id;
         userReadable << " [ ";
         int i = 0;
         for(i = 0; i < 8; i++){
-            //printf("data[%d] = %d\r\n", i, frame.data[i]);
             int dataI  = frame.data[i];
             std::cout << "data[" << i << "] = [" << std::hex << dataI << "]" << std::endl;
             userReadable << std::hex << dataI << " ";
@@ -72,18 +79,19 @@ void CanWorker::doWork()
 
         std::cout << userReadable.str() << std::endl;
 	
+        this->_frameBuffer.push_back(frame);
 
-        // Once we're done waiting, value is updated
-        emit valueChanged(QString::fromUtf8(userReadable.str().c_str()));
+        int bufferSize = this->_frameBuffer.size() * sizeof(frame);
+        std::cout << "Buffer contains " << this->_frameBuffer.size() << " elements at " << bufferSize << " bytes";
+
+        // emit valueChanged(QString::fromUtf8(userReadable.str().c_str()));
     }
 
-    // Set _working to false, meaning the process can't be aborted anymore.
-    mutex.lock();
+    this->_mutex.lock();
     _working = false;
-    mutex.unlock();
+    this->_mutex.unlock();
 
     qDebug()<<"Worker process finished in Thread "<<thread()->currentThreadId();
 
-    //Once 60 sec passed, the finished signal is sent
     emit finished();
 }

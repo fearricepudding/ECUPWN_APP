@@ -1,25 +1,34 @@
 #include "lookup.hpp"
 
-#include <iostream>
 #include <fstream>
+#include <string>
 
-Lookup::Lookup(){
-    this->loadCodes();
+Lookup::Lookup() {
+    int status = this->loadCodes();
+    this->status = status;
 };
 
-std::string Lookup::findCode(std::string code){
+int Lookup::getStatus() {
+    return this->status;
+};
+
+std::string Lookup::findCode(std::string code) {
     std::string response = "";
     try{
         response = this->data[code];
-    }catch(nlohmann::json_abi_v3_11_3::detail::type_error e){
+    }catch(json::type_error& e){
         return "Unknown code";
     };
     return response;
 };
 
-int Lookup::loadCodes(){
+int Lookup::loadCodes() {
     std::ifstream f("codes.json");
-    this->data = json::parse(f);
+    try{
+        this->data = json::parse(f);
+    }catch(json::parse_error& e){
+        return 1;
+    };
     return 0;
-}
+};
 

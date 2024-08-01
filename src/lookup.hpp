@@ -7,7 +7,9 @@ class Lookup{
 public: 
     std::string findCode(std::string);
     Lookup();
+    int getStatus();
 private: 
     int loadCodes();
     json data;
+    int status;
 };

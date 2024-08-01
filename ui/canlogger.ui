@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>957</width>
-    <height>582</height>
+    <width>718</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,18 +61,11 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>937</width>
-        <height>502</height>
+        <width>702</width>
+        <height>367</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">

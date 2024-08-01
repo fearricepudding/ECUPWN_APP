@@ -24,7 +24,11 @@ void CodeLookup::exit_app()
 void CodeLookup::lookupCode(){
     QString code = ui->codeInput->text();
     Lookup *lookup = new Lookup();
+    if(lookup->getStatus() != 0){
+        ui->output->setText("DTC database not found! Try updating local database");
+        return;
+    };
     std::string result = lookup->findCode(code.toStdString());
     QString resultQ = QString::fromUtf8(result.c_str());
     ui->output->setText("[*] "+code+" - "+resultQ);
-}
+};
