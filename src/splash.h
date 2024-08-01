@@ -22,6 +22,7 @@ private slots:
     void connect_settings();
     void connection_thread(int);
     void connectToCan();
+    void testLog();
 
 public:
     Splash(QWidget *parent = nullptr);

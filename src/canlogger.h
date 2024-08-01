@@ -11,7 +11,7 @@ class CanLogger : public QDialog
 {
     Q_OBJECT
 
-private slots:
+public slots:
     void addTest();
     void remoteStartLog();
     void newData(QString);

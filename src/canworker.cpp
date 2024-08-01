@@ -52,6 +52,10 @@ std::vector<can_frame> CanWorker::getBuffer(){
     return buffer;
 };
 
+void CanWorker::testing(){
+    qDebug()<<"Testing!";
+}
+
 void CanWorker::doWork() {
     qDebug()<<"Starting worker process in Thread "<<thread()->currentThreadId();
     while(1) {

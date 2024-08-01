@@ -16,8 +16,8 @@ Splash::Splash(QWidget *parent)
     worker = new CanWorker();
     worker->moveToThread(thread);
     
-    connect(worker, SIGNAL(workRequested()), thread, SLOT(start()));
-    //connect(thread, SIGNAL(started()), worker, SLOT(doWork()));
+//    connect(worker, SIGNAL(workRequested()), thread, SLOT(start()));
+    connect(thread, SIGNAL(started()), worker, SLOT(doWork()));
     connect(worker, SIGNAL(finished()), thread, SLOT(quit()), Qt::DirectConnection);
 
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
@@ -45,9 +45,13 @@ void Splash::lookup_code(){
 
 void Splash::can_logger(){
     CanLogger *canLogger = new CanLogger;
-    connect(worker, SIGNAL(valueChanged(QString)), canLogger, SLOT(newData(QString)));
-    connect(canLogger, SIGNAL(startLog()), worker, SLOT(doWork()));
+    //connect(worker, SIGNAL(valueChanged(QString)), canLogger, SLOT(newData(QString)));
+    connect(canLogger, SIGNAL(startLog()), this, SLOT(testLog()));
     canLogger->show();
+}
+
+void Splash::testLog(){
+    thread->start();
 }
 
 void Splash::connect_settings(){
