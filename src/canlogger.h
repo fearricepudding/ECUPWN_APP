@@ -13,7 +13,11 @@ class CanLogger : public QDialog
 
 private slots:
     void addTest();
+    void remoteStartLog();
     void newData(QString);
+
+signals:
+    void startLog();
 
 public:
     explicit CanLogger(QWidget *parent = nullptr);

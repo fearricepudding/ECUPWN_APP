@@ -7,10 +7,15 @@ CanLogger::CanLogger(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->stateToggle, SIGNAL(clicked()), this, SLOT(addTest()));
+    connect(ui->stateToggle, SIGNAL(clicked()), this, SLOT(remoteStartLog()));
 
     this->counter = 0;
     this->scrollLimit = 100;
+}
+
+void CanLogger::remoteStartLog(){
+    qDebug() << "Sending startLog";
+    emit startLog();
 }
 
 void CanLogger::addTest(){
