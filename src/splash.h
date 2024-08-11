@@ -19,7 +19,6 @@ private slots:
     void exit_app();
     void lookup_code();
     void can_logger();
-    void connect_settings();
     void connection_thread(int);
     void connectToCan();
     void testLog();
@@ -32,7 +31,7 @@ private:
     Ui::Splash *ui;
     QThread *thread;
     CanWorker *worker; 
-    ConnectionSettings *connectionSettings;
+    void setupPages();
 
 };
 #endif // SPLASH_H

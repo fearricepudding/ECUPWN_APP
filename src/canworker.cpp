@@ -15,7 +15,9 @@ CanWorker::CanWorker(QObject *parent) :
 }
 
 void CanWorker::shutdown() {
-    this->_candy->shutdown();
+    if(this->_candy->isConnected()){
+        this->_candy->shutdown();
+    };
 };
 
 void CanWorker::requestWork() {

@@ -5,6 +5,8 @@
 #include "./connectionsettings.h"
 #include "../candy/src/candy.h"
 #include <QThread>
+#include <QTreeWidgetItem>
+#include <QTreeView>
 
 Splash::Splash(QWidget *parent)
     : QMainWindow(parent)
@@ -23,14 +25,25 @@ Splash::Splash(QWidget *parent)
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
     connect(ui->codeLookup, SIGNAL(clicked()), this, SLOT(lookup_code()));
     connect(ui->canLogger, SIGNAL(clicked()), this, SLOT(can_logger()));
-    connect(ui->connectBtn, SIGNAL(clicked()), this, SLOT(connect_settings()));
+
+    this->setupPages();
+
+    // Connect nav panel to pages
 }
+
 
 Splash::~Splash()
 {
     delete ui;
 }
 
+void Splash::setupPages(){
+
+    ConnectionSettings* connPage = new ConnectionSettings;
+    ui->stackedWidget->addWidget(connPage);
+    ui->stackedWidget->setCurrentIndex(2);
+
+}
 
 void Splash::exit_app()
 {
@@ -54,21 +67,12 @@ void Splash::testLog(){
     thread->start();
 }
 
-void Splash::connect_settings(){
-    this->connectionSettings = new ConnectionSettings();
-    connect(this->connectionSettings, SIGNAL(startCanThread(int)), this, SLOT(connection_thread(int)));
-    connect(this->connectionSettings, SIGNAL(joinCanNetwork()), this, SLOT(connectToCan()));
-    this->connectionSettings->show();
-}
-
 void Splash::connectToCan(){
     int result = worker->joinCanNetwork();
     if(result != 0){
-        this->connectionSettings->updateStatus((char*) "Failed to setup CAN network");
         ui->connectBtn->setText("ERROR");
         return;
     };
-    this->connectionSettings->updateStatus((char*) "Connected");
     ui->connectBtn->setText("CONNECTED");
     ui->connectBtn->setProperty("connected", "1");
     ui->connectBtn->style()->unpolish(ui->connectBtn);

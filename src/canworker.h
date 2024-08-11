@@ -6,8 +6,6 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
-struct can_frame;
-
 class CanWorker : public QObject
 {
     Q_OBJECT

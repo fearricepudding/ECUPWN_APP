@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-
-struct can_frame;
+#include <linux/can.h>
 
 class Candy {
 public: 
