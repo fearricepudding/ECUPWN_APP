@@ -106,45 +106,16 @@
         </property>
         <column>
          <property name="text">
-          <string>Connection</string>
+          <string/>
          </property>
         </column>
-        <item>
-         <property name="text">
-          <string>Connection setting </string>
-         </property>
-         <item>
-          <property name="text">
-           <string>ECUPWN Config</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Vehicle connection</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text">
-          <string>Vehicle information</string>
-         </property>
-         <item>
-          <property name="text">
-           <string>ECU Data</string>
-          </property>
-         </item>
-        </item>
-        <item>
-         <property name="text">
-          <string>Data</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="styleSheet">
          <string notr="true">#stackedWidget{
+padding-top:50px;
 background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
 }</string>
         </property>

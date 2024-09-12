@@ -12,10 +12,9 @@ class ConnectionSettings : public QDialog
 {
     Q_OBJECT
 private slots:
-    void test();
+    void startConnect();
 
 signals:
-    void startCanThread(int);
     void joinCanNetwork();
 
 public:

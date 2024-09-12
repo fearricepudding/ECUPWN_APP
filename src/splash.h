@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include "canworker.h"
 #include "connectionsettings.h"
+#include "CanQueue.h"
+#include "ConnectionManager.h"
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,9 +22,7 @@ private slots:
     void exit_app();
     void lookup_code();
     void can_logger();
-    void connection_thread(int);
-    void connectToCan();
-    void testLog();
+    void treeItemClicked();
 
 public:
     Splash(QWidget *parent = nullptr);
@@ -29,9 +30,9 @@ public:
 
 private:
     Ui::Splash *ui;
-    QThread *thread;
-    CanWorker *worker; 
     void setupPages();
-
+    void addPage(std::string, int);
+    CanQueue _canQueue;
+    ConnectionManager *conManager;
 };
 #endif // SPLASH_H

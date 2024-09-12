@@ -4,6 +4,7 @@
 #include "./canlogger.h"
 #include "./connectionsettings.h"
 #include "../candy/src/candy.h"
+#include "ConnectionManager.h"
 #include <QThread>
 #include <QTreeWidgetItem>
 #include <QTreeView>
@@ -14,23 +15,25 @@ Splash::Splash(QWidget *parent)
 {
     ui->setupUi(this);
 
-    thread = new QThread();
-    worker = new CanWorker();
-    worker->moveToThread(thread);
-    
-//    connect(worker, SIGNAL(workRequested()), thread, SLOT(start()));
-    connect(thread, SIGNAL(started()), worker, SLOT(doWork()));
-    connect(worker, SIGNAL(finished()), thread, SLOT(quit()), Qt::DirectConnection);
+    this->conManager = new ConnectionManager();
 
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
     connect(ui->codeLookup, SIGNAL(clicked()), this, SLOT(lookup_code()));
     connect(ui->canLogger, SIGNAL(clicked()), this, SLOT(can_logger()));
 
-    this->setupPages();
 
-    // Connect nav panel to pages
+    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(treeItemClicked()));
+
+    this->setupPages();
 }
 
+void Splash::addPage(std::string name, int index) {
+
+}
+
+void Splash::treeItemClicked() {
+    qDebug() << "Tree item clicked \n";
+}
 
 Splash::~Splash()
 {
@@ -38,16 +41,24 @@ Splash::~Splash()
 }
 
 void Splash::setupPages(){
+    QTreeWidget * tree = ui->treeWidget;
+
+    QTreeWidgetItem * topLevel = new QTreeWidgetItem();
+    topLevel->setText(0, "ECUPWN");
 
     ConnectionSettings* connPage = new ConnectionSettings;
     ui->stackedWidget->addWidget(connPage);
-    ui->stackedWidget->setCurrentIndex(2);
+    ui->stackedWidget->setCurrentIndex(1);
 
+    QTreeWidgetItem * item = new QTreeWidgetItem();
+    item->setText(0,"Connection settings");
+    topLevel->addChild(item);
+
+    tree->addTopLevelItem(topLevel); 
 }
 
 void Splash::exit_app()
 {
-    this->worker->shutdown();
     QApplication::exit();
 }
 
@@ -61,26 +72,4 @@ void Splash::can_logger(){
     //connect(worker, SIGNAL(valueChanged(QString)), canLogger, SLOT(newData(QString)));
     connect(canLogger, SIGNAL(startLog()), this, SLOT(testLog()));
     canLogger->show();
-}
-
-void Splash::testLog(){
-    thread->start();
-}
-
-void Splash::connectToCan(){
-    int result = worker->joinCanNetwork();
-    if(result != 0){
-        ui->connectBtn->setText("ERROR");
-        return;
-    };
-    ui->connectBtn->setText("CONNECTED");
-    ui->connectBtn->setProperty("connected", "1");
-    ui->connectBtn->style()->unpolish(ui->connectBtn);
-    ui->connectBtn->style()->polish(ui->connectBtn);
-};
-
-void Splash::connection_thread(int bitrate){
-    worker->abort();
-    thread->wait(); // If the thread is not running, this will immediately return.
-    worker->requestWork();
 }

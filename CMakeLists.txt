@@ -11,8 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Boost COMPONENTS thread system chrono REQUIRED)
 
 set(TS_FILES ECUPWN_en_GB.ts)
+
+include_directories(${Boost_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
         include/json.hpp
@@ -30,6 +33,10 @@ set(PROJECT_SOURCES
         src/connectionsettings.cpp
         src/canworker.cpp
         src/canworker.h
+        src/CanQueue.h
+        src/CanQueue.cpp
+        src/ConnectionManager.cpp
+        src/ConnectionManager.h
 
         ui/codelookup.ui
         ui/splash.ui
@@ -68,7 +75,7 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(ECUPWN PRIVATE Qt${QT_VERSION_MAJOR}::Widgets candy)
+target_link_libraries(ECUPWN PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${Boost_LIBRARIES} candy)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
