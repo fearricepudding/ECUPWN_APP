@@ -6,7 +6,8 @@
 #include "connectionsettings.h"
 #include "CanQueue.h"
 #include "ConnectionManager.h"
-#include <vector>
+#include <map>
+#include <QTreeWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,7 +23,7 @@ private slots:
     void exit_app();
     void lookup_code();
     void can_logger();
-    void treeItemClicked();
+    void treeItemClicked(QTreeWidgetItem*, int);
 
 public:
     Splash(QWidget *parent = nullptr);
@@ -31,7 +32,13 @@ public:
 private:
     Ui::Splash *ui;
     void setupPages();
-    void addPage(std::string, int);
+    template <class Page>
+    void addPage(std::string, std::string, Page*);
+    std::map<std::string, std::map<std::string, int>> navigation;
+    int navCount;
+    void updateNavigation();
+    std::map<std::string, int> findNavParent(std::string);
+    int findNavItem(std::string, std::string);
     CanQueue _canQueue;
     ConnectionManager *conManager;
 };

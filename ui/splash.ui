@@ -122,8 +122,7 @@ background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="page"/>
-        <widget class="QWidget" name="page_2"/>
+        <widget class="QWidget" name="blank"/>
        </widget>
       </item>
      </layout>
@@ -153,7 +152,7 @@ background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>03/08/2024</string>
+         <string>12/09/2024</string>
         </property>
        </widget>
       </item>
