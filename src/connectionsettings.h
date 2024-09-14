@@ -2,7 +2,6 @@
 #define CONNECTIONSETTINGS_H
 
 #include <QDialog>
-#include "canworker.h"
 
 namespace Ui {
 class ConnectionSettings;

@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <sstream>
 #include <iostream>
-#include "../candy/src/candy.h"
+#include "../../candy/src/candy.h"
 
 CanWorker::CanWorker(QObject *parent) :
     QObject(parent) {

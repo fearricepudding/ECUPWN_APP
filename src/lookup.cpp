@@ -1,4 +1,5 @@
 #include "lookup.hpp"
+#include "File.h"
 
 #include <fstream>
 #include <string>
@@ -18,17 +19,15 @@ std::string Lookup::findCode(std::string code) {
         response = this->data[code];
     }catch(json::type_error& e){
         return "Unknown code";
-    };
+    }catch(std::exception &e) {
+        return "Unknown error";
+    }
     return response;
 };
 
 int Lookup::loadCodes() {
-    std::ifstream f("codes.json");
-    try{
-        this->data = json::parse(f);
-    }catch(json::parse_error& e){
-        return 1;
-    };
-    return 0;
+    File *codeDatabase = new File("codes.json");
+    this->data = codeDatabase->getContent();
+return 0;
 };
 

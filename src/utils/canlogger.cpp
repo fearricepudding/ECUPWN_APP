@@ -1,5 +1,5 @@
 #include "canlogger.h"
-#include "../ui/ui_canlogger.h"
+#include "../../ui/ui_canlogger.h"
 #include <QDebug>
 
 CanLogger::CanLogger(QWidget *parent)

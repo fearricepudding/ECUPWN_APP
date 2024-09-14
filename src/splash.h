@@ -2,10 +2,9 @@
 #define SPLASH_H
 
 #include <QMainWindow>
-#include "canworker.h"
 #include "connectionsettings.h"
-#include "CanQueue.h"
-#include "ConnectionManager.h"
+#include "CAN/CanQueue.h"
+#include "CAN/ConnectionManager.h"
 #include <map>
 #include <QTreeWidgetItem>
 

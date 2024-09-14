@@ -23,20 +23,29 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/splash.cpp
         src/splash.h
+
         src/lookup.cpp
         src/lookup.hpp
-        src/codelookup.cpp
-        src/canlogger.h
-        src/canlogger.cpp
-        src/codelookup.h
+
         src/connectionsettings.h
         src/connectionsettings.cpp
-        src/canworker.cpp
-        src/canworker.h
-        src/CanQueue.h
-        src/CanQueue.cpp
-        src/ConnectionManager.cpp
-        src/ConnectionManager.h
+
+        src/File.cpp
+        src/File.h
+
+        src/utils/codelookup.cpp
+        src/utils/canlogger.h
+        src/utils/canlogger.cpp
+        src/utils/codelookup.h
+
+       
+        
+        src/CAN/canworker.cpp
+        src/CAN/canworker.h
+        src/CAN/CanQueue.h
+        src/CAN/CanQueue.cpp
+        src/CAN/ConnectionManager.cpp
+        src/CAN/ConnectionManager.h
 
         ui/codelookup.ui
         ui/splash.ui

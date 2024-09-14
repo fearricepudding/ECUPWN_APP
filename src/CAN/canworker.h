@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QMutex>
-#include "../candy/src/candy.h"
+#include "../../candy/src/candy.h"
 #include <linux/can.h>
 #include <linux/can/raw.h>
 

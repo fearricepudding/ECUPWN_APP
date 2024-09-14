@@ -1,10 +1,11 @@
 #include "splash.h"
-#include "./codelookup.h"
 #include "../ui/ui_splash.h"
-#include "./canlogger.h"
+#include "./utils/codelookup.h"
+#include "./utils/canlogger.h"
 #include "./connectionsettings.h"
 #include "../candy/src/candy.h"
-#include "ConnectionManager.h"
+#include "CAN/ConnectionManager.h"
+
 #include <QThread>
 #include <QTreeWidgetItem>
 #include <QTreeView>
@@ -71,7 +72,7 @@ void Splash::updateNavigation() {
             QTreeWidgetItem * item = new QTreeWidgetItem();
             item->setText(0, QString::fromStdString(itemKey));
             topLevel->addChild(item);
-        }
+        };
 
         tree->addTopLevelItem(topLevel); 
     }
@@ -81,17 +82,14 @@ void Splash::treeItemClicked(QTreeWidgetItem *item, int index) {
     QTreeWidgetItem *parent = item->parent();
     if(!parent){
         return;
-    }
-
-    qDebug() << "Tree item clicked: " << item->text(0) << " - " << parent->text(0);
+    };
 
     std::string parentName = parent->text(0).toStdString();
     std::string itemName = item->text(0).toStdString();
 
     int navIndex = this->findNavItem(parentName, itemName);
     ui->stackedWidget->setCurrentIndex(navIndex);
-    qDebug() << navIndex;
-}
+};
 
 Splash::~Splash()
 {
@@ -105,13 +103,10 @@ void Splash::setupPages(){
     this->addPage("Connections", "+ connection", connPage);
 
     CanLogger *logPage = new CanLogger;
-    this->addPage("Connections", "Connection 1", logPage);
-
-   
+    this->addPage("Utils", "Can logger", logPage);
 
     this->updateNavigation();
-
-}
+};
 
 void Splash::exit_app()
 {

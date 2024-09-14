@@ -1,6 +1,6 @@
 #include "codelookup.h"
-#include "../ui/ui_codelookup.h"
-#include "./lookup.hpp"
+#include "../../ui/ui_codelookup.h"
+#include "../lookup.hpp"
 
 CodeLookup::CodeLookup(QWidget *parent)
     : QMainWindow(parent)
