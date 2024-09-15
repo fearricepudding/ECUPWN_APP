@@ -1,8 +1,16 @@
 #pragma once
 
+#include "../include/json.hpp"
+#include "File.h"
+
 class State{
 public:
-    State();
+    State(std::string);
+    void load();
+    void save();
+    void create();
+
 private:
-    load(std::string);
+    nlohmann::json state;
+    File *dataFile;
 };

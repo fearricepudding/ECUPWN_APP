@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Boost COMPONENTS thread system chrono REQUIRED)
+find_package(Boost COMPONENTS thread system chrono filesystem REQUIRED)
 
 set(TS_FILES ECUPWN_en_GB.ts)
 
@@ -32,6 +32,8 @@ set(PROJECT_SOURCES
 
         src/File.cpp
         src/File.h
+        src/State.cpp
+        src/State.h
 
         src/utils/codelookup.cpp
         src/utils/canlogger.h

@@ -5,6 +5,7 @@
 #include "./connectionsettings.h"
 #include "../candy/src/candy.h"
 #include "CAN/ConnectionManager.h"
+#include "State.h"
 
 #include <QThread>
 #include <QTreeWidgetItem>
@@ -15,6 +16,9 @@ Splash::Splash(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Splash)
 {
+    this->state = new State("data.json");
+    this->state->load();
+
     ui->setupUi(this);
 
     this->conManager = new ConnectionManager();

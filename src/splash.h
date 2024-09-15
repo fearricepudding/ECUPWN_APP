@@ -5,6 +5,8 @@
 #include "connectionsettings.h"
 #include "CAN/CanQueue.h"
 #include "CAN/ConnectionManager.h"
+#include "State.h"
+
 #include <map>
 #include <QTreeWidgetItem>
 
@@ -40,5 +42,6 @@ private:
     int findNavItem(std::string, std::string);
     CanQueue _canQueue;
     ConnectionManager *conManager;
+    State *state;
 };
 #endif // SPLASH_H
