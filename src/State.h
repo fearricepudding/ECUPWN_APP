@@ -10,7 +10,8 @@ public:
     void save();
     void create();
 
-private:
     nlohmann::json state;
+
+private:
     File *dataFile;
 };
