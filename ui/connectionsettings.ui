@@ -20,39 +20,56 @@
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Connection Status: </string>
+         <property name="styleSheet">
+          <string notr="true">font-size:20px;</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="status">
          <property name="text">
-          <string>Ready</string>
+          <string>Create new connection</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>IP</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_2"/>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="placeholderText">
+        <string>0.0.0.0</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Port</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_2">
+       <property name="text">
+        <string>8047</string>
+       </property>
+       <property name="placeholderText">
+        <string>8047</string>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>Connect local</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="connectBtn">
          <property name="text">
-          <string>Connect remote</string>
+          <string>Create connection</string>
          </property>
         </widget>
        </item>

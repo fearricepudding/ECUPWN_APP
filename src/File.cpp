@@ -14,10 +14,8 @@ nlohmann::json File::getContent() {
     std::ifstream file(this->_path, std::ios::binary);
     try {
         data = nlohmann::json::parse(file);
-        std::cout << data.dump() << std::endl;
         return data;
     } catch(nlohmann::json::parse_error &e) {
-        std::cout << "Failed to parse file: " << this->_path << std::endl;
         throw e;
     };
     return data;

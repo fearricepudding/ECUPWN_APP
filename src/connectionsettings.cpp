@@ -20,10 +20,7 @@ ConnectionSettings::~ConnectionSettings()
 }
 
 void ConnectionSettings::updateStatus(char* status){
-    ui->status->setText(status);
 }
 
 void ConnectionSettings::startConnect(){
-    ui->status->setText("Connecting...");
-    emit joinCanNetwork();
 }

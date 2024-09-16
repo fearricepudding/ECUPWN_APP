@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>609</width>
-    <height>159</height>
+    <height>165</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,23 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QLabel" name="label_2">
+      <property name="styleSheet">
+       <string notr="true">font-size:20px;
+</string>
+      </property>
+      <property name="text">
+       <string>DCT Lookup</string>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Fault code</string>
+       <string>Fault code:</string>
       </property>
      </widget>
     </item>
@@ -74,7 +88,7 @@
      <x>0</x>
      <y>0</y>
      <width>609</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>

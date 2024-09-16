@@ -25,8 +25,6 @@ Splash::Splash(QWidget *parent)
     this->navCount = 1;
 
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
-    connect(ui->codeLookup, SIGNAL(clicked()), this, SLOT(lookup_code()));
-    connect(ui->canLogger, SIGNAL(clicked()), this, SLOT(can_logger()));
     connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(treeItemClicked(QTreeWidgetItem *, int)));
 
     this->setupPages();
@@ -108,6 +106,9 @@ void Splash::setupPages(){
 
     CanLogger *logPage = new CanLogger;
     this->addPage("Utils", "Can logger", logPage);
+
+    CodeLookup *lookup = new CodeLookup;
+    this->addPage("Utils", "DTC lookup", lookup);
 
     this->updateNavigation();
 };

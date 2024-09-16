@@ -59,19 +59,12 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="codeLookup">
-        <property name="text">
-         <string>DTC LOOKUP</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="canLogger">
+       <widget class="QLabel" name="label_3">
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">padding-left:15px;</string>
         </property>
         <property name="text">
-         <string>CAN LOGGER</string>
+         <string>Profile: none</string>
         </property>
        </widget>
       </item>
@@ -115,7 +108,7 @@
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="styleSheet">
          <string notr="true">#stackedWidget{
-padding-top:50px;
+
 background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
 }</string>
         </property>
