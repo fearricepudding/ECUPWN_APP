@@ -11,10 +11,10 @@ class ConnectionSettings : public QDialog
 {
     Q_OBJECT
 private slots:
-    void startConnect();
+    void createConnection();
 
 signals:
-    void joinCanNetwork();
+    void createConnection(std::string, std::string);
 
 public:
     explicit ConnectionSettings(QWidget *parent = nullptr);

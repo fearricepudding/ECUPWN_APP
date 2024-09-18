@@ -16,8 +16,8 @@ Splash::Splash(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Splash)
 {
-    this->state = new State("data.json");
-    this->state->load();
+    this->stateManager = new State("data.json");
+    this->state = stateManager->load();
 
     ui->setupUi(this);
 
@@ -29,6 +29,10 @@ Splash::Splash(QWidget *parent)
 
     this->setupPages();
 }
+
+void Splash::saveState() {
+    this->stateManager->save(this->state);
+};
 
 template <class Page>
 void Splash::addPage(std::string parent, std::string name, Page *page) {
@@ -67,6 +71,30 @@ int Splash::findNavItem(std::string parentName, std::string itemName) {
 void Splash::updateNavigation() {
 
     QTreeWidget * tree = ui->treeWidget;
+
+    tree->clear();
+
+    
+    try {
+        QTreeWidgetItem * topLevel = new QTreeWidgetItem();
+        topLevel->setText(0, QString::fromStdString("Connections"));
+        nlohmann::json connections = this->state["connections"];
+        for (auto& [key, value] : connections.items()) {
+            nlohmann::json connection = nlohmann::json(value);
+            std::string name = connection["name"];
+            QTreeWidgetItem * item = new QTreeWidgetItem();
+            item->setText(0, QString::fromStdString(name));
+            topLevel->addChild(item);
+            tree->addTopLevelItem(topLevel); 
+        };
+    } catch(nlohmann::json::parse_error &e) {
+        std::cout << "No connections found" << std::endl;
+    } catch(nlohmann::json::out_of_range &e) {
+        std::cout << "No connections found" << std::endl;
+    } catch(nlohmann::json::type_error &e) {
+        std::cout << "No connections found" << std::endl;
+    };
+
     for (auto& [key, value] : this->navigation) {
         QTreeWidgetItem * topLevel = new QTreeWidgetItem();
         topLevel->setText(0, QString::fromStdString(key));
@@ -98,11 +126,16 @@ Splash::~Splash()
     delete ui;
 }
 
+void Splash::createConnection(std::string ip, std::string port) {
+    std::cout << "Creating connection for: " << ip << " : " << port << std::endl;
+};
+
 void Splash::setupPages(){
     ui->stackedWidget->setCurrentIndex(0);
 
     ConnectionSettings* connPage = new ConnectionSettings;
-    this->addPage("Connections", "+ connection", connPage);
+    connect(connPage, SIGNAL(createConnection(std::string, std::string)), this, SLOT(createConnection(std::string, std::string)));
+    this->addPage("ECUPWN", "Create connection", connPage);
 
     CanLogger *logPage = new CanLogger;
     this->addPage("Utils", "Can logger", logPage);

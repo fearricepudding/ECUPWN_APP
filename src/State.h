@@ -6,11 +6,9 @@
 class State{
 public:
     State(std::string);
-    void load();
-    void save();
-    void create();
-
-    nlohmann::json state;
+    nlohmann::json load();
+    void save(nlohmann::json);
+    nlohmann::json create();
 
 private:
     File *dataFile;

@@ -10,7 +10,7 @@ ConnectionSettings::ConnectionSettings(QWidget *parent)
 {
     ui->setupUi(this);
     
-    connect(ui->connectBtn, SIGNAL(clicked()), this, SLOT(startConnect()));
+    connect(ui->connectBtn, SIGNAL(clicked()), this, SLOT(createConnection()));
 }
 
 ConnectionSettings::~ConnectionSettings()
@@ -22,5 +22,8 @@ ConnectionSettings::~ConnectionSettings()
 void ConnectionSettings::updateStatus(char* status){
 }
 
-void ConnectionSettings::startConnect(){
+void ConnectionSettings::createConnection(){
+    std::string ip = ui->ip->text().toStdString();
+    std::string port = ui->port->text().toStdString();
+    emit(createConnection(ip, port));
 }

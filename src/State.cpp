@@ -5,11 +5,12 @@ State::State(std::string path) {
     this->dataFile = new File(path);
 };
 
-void State::load() {
+nlohmann::json State::load() {
+    nlohmann::json state;
     try {
-        this->state = this->dataFile->getContent();
-        std::string init = this->state["initiated"];
-        return;
+        state = this->dataFile->getContent();
+        std::string init = state["initiated"];
+        return state;
     } catch(nlohmann::json::parse_error &e) {
         std::cout << "[!] Could not load state" << std::endl;
     } catch(nlohmann::json::out_of_range &e) {
@@ -17,18 +18,21 @@ void State::load() {
     } catch(nlohmann::json::type_error &e) {
         std::cout << "[!] State init error: type error" << std::endl;
     }
-    this->create();
+    state = this->create();
+    return state;
 };
 
-void State::create() {
+nlohmann::json State::create() {
     std::cout << "[*] Creating new state file" << std::endl;
-    this->state["initiated"] = "true";
-    this->save();
+    nlohmann::json state;
+    state["initiated"] = "true";
+    this->save(state);
+    return state;
 }
 
-void State::save() {
+void State::save(nlohmann::json state) {
     try {
-        this->dataFile->writeContent(this->state);
+        this->dataFile->writeContent(state);
     } catch(std::exception &e) {
         std::cout << "[!] Failed to write state: " << e.what() << std::endl;
     };

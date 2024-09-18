@@ -38,7 +38,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="ip">
        <property name="styleSheet">
         <string notr="true"/>
        </property>
@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_2">
+      <widget class="QLineEdit" name="port">
        <property name="text">
         <string>8047</string>
        </property>

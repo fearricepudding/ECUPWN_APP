@@ -25,10 +25,15 @@ private slots:
     void lookup_code();
     void can_logger();
     void treeItemClicked(QTreeWidgetItem*, int);
+    void createConnection(std::string, std::string);
 
 public:
     Splash(QWidget *parent = nullptr);
     ~Splash();
+
+    CanQueue _canQueue;
+    State *stateManager;
+    nlohmann::json state;
 
 private:
     Ui::Splash *ui;
@@ -40,8 +45,7 @@ private:
     void updateNavigation();
     std::map<std::string, int> findNavParent(std::string);
     int findNavItem(std::string, std::string);
-    CanQueue _canQueue;
+    void saveState();
     ConnectionManager *conManager;
-    State *state;
 };
 #endif // SPLASH_H
