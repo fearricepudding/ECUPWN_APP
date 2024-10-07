@@ -3,6 +3,7 @@
 #include "./utils/codelookup.h"
 #include "./utils/canlogger.h"
 #include "./connectionsettings.h"
+#include "./existingconnection.h"
 #include "../candy/src/candy.h"
 #include "CAN/ConnectionManager.h"
 #include "State.h"
@@ -71,29 +72,7 @@ int Splash::findNavItem(std::string parentName, std::string itemName) {
 void Splash::updateNavigation() {
 
     QTreeWidget * tree = ui->treeWidget;
-
     tree->clear();
-
-    
-    try {
-        QTreeWidgetItem * topLevel = new QTreeWidgetItem();
-        topLevel->setText(0, QString::fromStdString("Connections"));
-        nlohmann::json connections = this->state["connections"];
-        for (auto& [key, value] : connections.items()) {
-            nlohmann::json connection = nlohmann::json(value);
-            std::string name = connection["name"];
-            QTreeWidgetItem * item = new QTreeWidgetItem();
-            item->setText(0, QString::fromStdString(name));
-            topLevel->addChild(item);
-            tree->addTopLevelItem(topLevel); 
-        };
-    } catch(nlohmann::json::parse_error &e) {
-        std::cout << "No connections found" << std::endl;
-    } catch(nlohmann::json::out_of_range &e) {
-        std::cout << "No connections found" << std::endl;
-    } catch(nlohmann::json::type_error &e) {
-        std::cout << "No connections found" << std::endl;
-    };
 
     for (auto& [key, value] : this->navigation) {
         QTreeWidgetItem * topLevel = new QTreeWidgetItem();
@@ -126,12 +105,24 @@ Splash::~Splash()
     delete ui;
 }
 
-void Splash::createConnection(std::string ip, std::string port) {
-    std::cout << "Creating connection for: " << ip << " : " << port << std::endl;
-};
-
 void Splash::setupPages(){
     ui->stackedWidget->setCurrentIndex(0);
+
+    ExistingConnection *existingConnectionPage = new ExistingConnection();
+    try {
+        nlohmann::json connections = this->state["connections"];
+        for (auto& [key, value] : connections.items()) {
+            nlohmann::json connection = nlohmann::json(value);
+            std::string name = connection["name"];
+            this->addPage("Connections", name, existingConnectionPage);
+        };
+    } catch(nlohmann::json::parse_error &e) {
+        std::cout << "No connections found" << std::endl;
+    } catch(nlohmann::json::out_of_range &e) {
+        std::cout << "No connections found" << std::endl;
+    } catch(nlohmann::json::type_error &e) {
+        std::cout << "No connections found" << std::endl;
+    };
 
     ConnectionSettings* connPage = new ConnectionSettings;
     connect(connPage, SIGNAL(createConnection(std::string, std::string)), this, SLOT(createConnection(std::string, std::string)));
@@ -162,3 +153,16 @@ void Splash::can_logger(){
     connect(canLogger, SIGNAL(startLog()), this, SLOT(testLog()));
     canLogger->show();
 }
+
+void Splash::createConnection(std::string ip, std::string port) {
+    std::cout << "Creating connection for: " << ip << " : " << port << std::endl;
+    nlohmann::json newConnection;
+    newConnection["ip"] = ip;
+    newConnection["port"] = port;
+    newConnection["name"] = "connection name";
+
+    nlohmann::json connections = this->state["connections"];
+    connections.push_back(newConnection);
+    this->state["connections"] = connections;
+    this->updateNavigation();
+};

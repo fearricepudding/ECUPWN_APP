@@ -18,41 +18,26 @@ set(TS_FILES ECUPWN_en_GB.ts)
 include_directories(${Boost_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
-        include/json.hpp
-
         src/main.cpp
         src/splash.cpp
-        src/splash.h
-
         src/lookup.cpp
-        src/lookup.hpp
-
-        src/connectionsettings.h
         src/connectionsettings.cpp
+        src/existingconnection.cpp
 
         src/File.cpp
-        src/File.h
         src/State.cpp
-        src/State.h
-
         src/utils/codelookup.cpp
-        src/utils/canlogger.h
         src/utils/canlogger.cpp
-        src/utils/codelookup.h
-
-       
-        
         src/CAN/canworker.cpp
-        src/CAN/canworker.h
-        src/CAN/CanQueue.h
         src/CAN/CanQueue.cpp
         src/CAN/ConnectionManager.cpp
-        src/CAN/ConnectionManager.h
+
 
         ui/codelookup.ui
         ui/splash.ui
         ui/canlogger.ui
         ui/connectionsettings.ui
+        ui/existingconnection.ui
 
         ${TS_FILES}
 )
