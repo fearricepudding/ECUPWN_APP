@@ -32,7 +32,6 @@ set(PROJECT_SOURCES
         src/CAN/CanQueue.cpp
         src/CAN/ConnectionManager.cpp
 
-
         ui/codelookup.ui
         ui/splash.ui
         ui/canlogger.ui

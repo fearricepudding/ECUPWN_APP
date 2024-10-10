@@ -6,6 +6,7 @@
 #include "CAN/CanQueue.h"
 #include "CAN/ConnectionManager.h"
 #include "State.h"
+#include "../include/json.hpp"
 
 #include <map>
 #include <QTreeWidgetItem>
@@ -27,6 +28,9 @@ private slots:
     void treeItemClicked(QTreeWidgetItem*, int);
     void createConnection(std::string, std::string);
 
+signals:
+    void updateConnectionPage(nlohmann::json);
+
 public:
     Splash(QWidget *parent = nullptr);
     ~Splash();
@@ -40,12 +44,16 @@ private:
     void setupPages();
     template <class Page>
     void addPage(std::string, std::string, Page*);
+    template <class Page>
+    void addPage(std::string, std::string, Page*, bool);
     std::map<std::string, std::map<std::string, int>> navigation;
     int navCount;
     void updateNavigation();
     std::map<std::string, int> findNavParent(std::string);
     int findNavItem(std::string, std::string);
     void saveState();
+    void connectionClicked(std::string);
+    nlohmann::json getConnectionData(std::string);
     ConnectionManager *conManager;
 };
 #endif // SPLASH_H
