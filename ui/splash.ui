@@ -125,7 +125,7 @@ background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>ECUPWN v0.1 [dev build]</string>
+         <string>ECUPWN v0.1 [dev build] [10/10/2024]</string>
         </property>
        </widget>
       </item>
@@ -145,7 +145,7 @@ background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>12/09/2024</string>
+         <string>InitialDev</string>
         </property>
        </widget>
       </item>
@@ -159,7 +159,7 @@ background: #000000 url(&quot;./logo.png&quot;) center center 10px no-repeat;
      <x>0</x>
      <y>0</y>
      <width>1198</width>
-     <height>28</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>

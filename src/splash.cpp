@@ -23,11 +23,16 @@ Splash::Splash(QWidget *parent)
 
     ui->setupUi(this);
 
-    this->conManager = new ConnectionManager();
+    this->conManager = new ConnectionManager(&_canQueue);
+    connect(this->conManager, SIGNAL(newData()), this, SLOT(updateCanData()));
     this->navCount = 0;
 
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
     connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), this, SLOT(treeItemClicked(QTreeWidgetItem *, int)));
+
+    QThread* thread = new QThread();
+    this->conManager->moveToThread(thread);
+    thread->start();
 
     this->setupPages();
 }
@@ -94,7 +99,7 @@ void Splash::updateNavigation() {
 
 void Splash::connectionClicked(std::string connectionName) {
     nlohmann::json connection = this->getConnectionData(connectionName);
-    //emit(updateConnectionPage(connection));
+    emit(updateConnectionPage(connection));
 };
 
 void Splash::treeItemClicked(QTreeWidgetItem *item, int index) {
@@ -111,7 +116,6 @@ void Splash::treeItemClicked(QTreeWidgetItem *item, int index) {
     };
 
     int navIndex = this->findNavItem(parentName, itemName);
-    std::cout << itemName << std::endl << navIndex << std::endl;
     ui->stackedWidget->setCurrentIndex(navIndex);
 };
 
@@ -126,8 +130,6 @@ nlohmann::json Splash::getConnectionData(std::string connectionName) {
         for (auto& [key, value] : connections.items()) {
             nlohmann::json connection = nlohmann::json(value);
             std::string name = connection["name"];
-            std::string ip = connection["ip"];
-            std::cout << ip << std::endl;
             if (name == connectionName) {
                 return connection;
             }
@@ -145,6 +147,7 @@ void Splash::setupPages(){
 
     ExistingConnection *existingConnectionPage = new ExistingConnection();
     connect(this, SIGNAL(updateConnectionPage(nlohmann::json)), existingConnectionPage, SLOT(updateConnectionData(nlohmann::json)));
+    connect(existingConnectionPage, SIGNAL(startConnect(nlohmann::json)), conManager, SLOT(openNewConnection(nlohmann::json)));
     bool connectionPageRegistered = false;
     try {
         nlohmann::json connections = this->state["connections"];
@@ -166,6 +169,7 @@ void Splash::setupPages(){
     this->addPage("Connections", "Create connection", connPage);
 
     CanLogger *logPage = new CanLogger;
+    connect(this->conManager, SIGNAL(newData()), logPage, SLOT(addTest()));
     this->addPage("Utils", "Can logger", logPage);
 
     CodeLookup *lookup = new CodeLookup;
@@ -204,3 +208,7 @@ void Splash::createConnection(std::string ip, std::string port) {
     this->saveState();
     this->updateNavigation();
 };
+
+void Splash::updateCanData() {
+    std::cout << "New can data" << std::endl;
+}

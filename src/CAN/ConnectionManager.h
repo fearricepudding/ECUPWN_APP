@@ -1,11 +1,27 @@
 #pragma once
 
-#include <boost/thread.hpp>
+#include "../../include/json.hpp"
+#include "CanQueue.h"
 
-class ConnectionManager {
+#include <linux/can.h>
+#include <boost/thread.hpp>
+#include <QObject>
+
+class ConnectionManager : public QObject {
+    Q_OBJECT
+
+private slots:
+    void openNewConnection(nlohmann::json);
+signals:
+    void newData();
+
 public:
-    void addThread(boost::thread);
+    ConnectionManager(CanQueue*);
+    void addThread(boost::thread*);
     void joinAll();
 private:
+    CanQueue* canQueue;
+    void remoteConnection(CanQueue *, nlohmann::json);
     boost::thread_group connectionThreads;
+
 };

@@ -12,8 +12,10 @@ class ExistingConnection : public QDialog
     Q_OBJECT
 private slots:
     void updateConnectionData(nlohmann::json);
+    void connectButtonClicked();
 
 signals:
+    void startConnect(nlohmann::json);
 
 public:
     explicit ExistingConnection(QWidget *parent = nullptr);
@@ -22,4 +24,5 @@ public:
 
 private:
     Ui::ExistingConnection *ui;
+    nlohmann::json connection;
 };

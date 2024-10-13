@@ -25,6 +25,7 @@ private slots:
     void exit_app();
     void lookup_code();
     void can_logger();
+    void updateCanData();
     void treeItemClicked(QTreeWidgetItem*, int);
     void createConnection(std::string, std::string);
 
