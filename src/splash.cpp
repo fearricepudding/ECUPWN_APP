@@ -24,7 +24,6 @@ Splash::Splash(QWidget *parent)
     ui->setupUi(this);
 
     this->conManager = new ConnectionManager(&_canQueue);
-    connect(this->conManager, SIGNAL(newData()), this, SLOT(updateCanData()));
     this->navCount = 0;
 
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
@@ -168,8 +167,8 @@ void Splash::setupPages(){
     connect(connPage, SIGNAL(createConnection(std::string, std::string)), this, SLOT(createConnection(std::string, std::string)));
     this->addPage("Connections", "Create connection", connPage);
 
-    CanLogger *logPage = new CanLogger;
-    connect(this->conManager, SIGNAL(newData()), logPage, SLOT(addTest()));
+    CanLogger *logPage = new CanLogger(&this->_canQueue);
+    connect(this->conManager, SIGNAL(newData()), logPage, SLOT(updateLogWindow()));
     this->addPage("Utils", "Can logger", logPage);
 
     CodeLookup *lookup = new CodeLookup;
@@ -188,13 +187,6 @@ void Splash::lookup_code(){
     lookupWindow->show();
 }
 
-void Splash::can_logger(){
-    CanLogger *canLogger = new CanLogger;
-    //connect(worker, SIGNAL(valueChanged(QString)), canLogger, SLOT(newData(QString)));
-    connect(canLogger, SIGNAL(startLog()), this, SLOT(testLog()));
-    canLogger->show();
-}
-
 void Splash::createConnection(std::string ip, std::string port) {
     std::cout << "Creating connection for: " << ip << " : " << port << std::endl;
     nlohmann::json newConnection;
@@ -208,7 +200,3 @@ void Splash::createConnection(std::string ip, std::string port) {
     this->saveState();
     this->updateNavigation();
 };
-
-void Splash::updateCanData() {
-    std::cout << "New can data" << std::endl;
-}

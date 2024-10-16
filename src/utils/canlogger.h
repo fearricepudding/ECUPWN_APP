@@ -1,6 +1,8 @@
 #ifndef CANLOGGER_H
 #define CANLOGGER_H
 
+#include "../CAN/CanQueue.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -15,12 +17,13 @@ public slots:
     void addTest();
     void remoteStartLog();
     void newData(QString);
+    void updateLogWindow();
 
 signals:
     void startLog();
 
 public:
-    explicit CanLogger(QWidget *parent = nullptr);
+    explicit CanLogger(CanQueue*);
     ~CanLogger();
 
 private:
@@ -29,6 +32,7 @@ private:
     void renderCanLogs();
     int counter;
     int scrollLimit;
+    CanQueue *canData;
 };
 
 #endif // CANLOGGER_H

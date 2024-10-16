@@ -19,6 +19,7 @@ public:
     ConnectionManager(CanQueue*);
     void addThread(boost::thread*);
     void joinAll();
+    int refreshRate;
 private:
     CanQueue* canQueue;
     void remoteConnection(CanQueue *, nlohmann::json);

@@ -9,6 +9,7 @@
 ConnectionManager::ConnectionManager(CanQueue* canQueue)
     : QObject(0) {
         this->canQueue = canQueue;
+        this->refreshRate = 1000;
 };
 
 void ConnectionManager::openNewConnection(nlohmann::json connection) {
@@ -31,12 +32,13 @@ void ConnectionManager::joinAll() {
 };
 
 void ConnectionManager::remoteConnection(CanQueue*queue, nlohmann::json connection) {
-    //
     while(true) {
-        std::cout << "Ping" << std::endl;
+        // Get the new data from connection for *refreshRate* time
         can_frame frame;
         queue->add(frame);
+
+        // Update the UI
         emit(newData());
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(200));
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(this->refreshRate));
     }
 }
