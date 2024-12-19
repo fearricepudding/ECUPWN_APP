@@ -46,21 +46,28 @@ std::string uint8_to_hex_string(const uint8_t *v, const size_t s) {
 void CanLogger::renderCanLogs(){
     qDeleteAll(ui->log_container->widget()->findChildren<QWidget *>(QString(), Qt::FindDirectChildrenOnly));
     
-    std::list<can_frame> copy = this->canData->getQueue();
+    std::list<canfd_frame> copy = this->canData->getQueue();
+    if(copy.size() <= 0) {
+        return;
+    };
+    for (int i = 0; i < 100; i++) { 
+        canfd_frame frame = copy.back();
+        copy.pop_back();
 
-    for (can_frame &frame : copy) {
         std::stringstream frameString;
         frameString << std::hex << std::setw(2) << frame.can_id << " = ";
         frameString << uint8_to_hex_string(frame.data, 8);
            
         std::string framestdString = frameString.str();
-        std::cout << framestdString << std::endl;
+        // std::cout << framestdString << std::endl;
         QString frameQ = QString::fromStdString(framestdString);
         QLabel *newLabel = new QLabel();
         newLabel->setText(frameQ);
         ui->log_container->widget()->layout()->addWidget(newLabel);
     };
-    int count = this->canMessages.size();
+
+    int count = copy.size();
+    int buffer = this->canData->getBufferSize();
     ui->can_count->setText(QString::number(count));
     ui->log_container->scroll(9999, 0);
 }
@@ -73,7 +80,6 @@ void CanLogger::newData(QString newString){
 }
 
 void CanLogger::updateLogWindow() {
-    this->addTest();
     this->renderCanLogs();
 }
 

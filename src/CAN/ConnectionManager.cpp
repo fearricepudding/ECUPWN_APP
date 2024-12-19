@@ -9,7 +9,9 @@
 ConnectionManager::ConnectionManager(CanQueue* canQueue)
     : QObject(0) {
         this->canQueue = canQueue;
-        this->refreshRate = 1000;
+        this->refreshRate = 1;
+
+        boost::thread dataPushThread(&ConnectionManager::dataPusher, this, this->refreshRate);
 };
 
 void ConnectionManager::openNewConnection(nlohmann::json connection) {
@@ -32,13 +34,19 @@ void ConnectionManager::joinAll() {
 };
 
 void ConnectionManager::remoteConnection(CanQueue*queue, nlohmann::json connection) {
+    std::cout << "Creating remove connection" << std::endl;
     while(true) {
         // Get the new data from connection for *refreshRate* time
-        can_frame frame;
+        canfd_frame frame;
         queue->add(frame);
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(4)); 
+    };
+};
 
-        // Update the UI
+void ConnectionManager::dataPusher(int rate) {
+    int timeout = 1000/rate;
+    while(true) {
         emit(newData());
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(this->refreshRate));
-    }
-}
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(timeout)); 
+    };
+};

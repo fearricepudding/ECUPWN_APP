@@ -46,8 +46,8 @@ void CanWorker::abort() {
     this->_mutex.unlock();
 }
 
-std::vector<can_frame> CanWorker::getBuffer(){
-    std::vector<can_frame> buffer;
+std::vector<canfd_frame> CanWorker::getBuffer(){
+    std::vector<canfd_frame> buffer;
     this->_mutex.lock();
     buffer = this->_frameBuffer;
     this->_mutex.unlock();
@@ -68,36 +68,26 @@ void CanWorker::doWork() {
             break;
         };
 
-        can_frame frame = this->_candy->recieve();
+        canfd_frame frame = this->_candy->recieve();
         std::stringstream userReadable;
 
-        std::cout << std::hex << frame.can_id << " : " << std::dec << frame.can_dlc << " ";
+        //std::cout << std::hex << frame.can_id << " : " << std::dec << frame.can_dlc << " ";
         userReadable << std::hex << frame.can_id;
         userReadable << " [ ";
         int i = 0;
         for(i = 0; i < 8; i++){
             int dataI  = frame.data[i];
-            std::cout << "data[" << i << "] = [" << std::hex << dataI << "]" << std::endl;
             userReadable << std::hex << dataI << " ";
         };
-
         userReadable << "]";
-
-        std::cout << userReadable.str() << std::endl;
-	
         this->_frameBuffer.push_back(frame);
-
         int bufferSize = this->_frameBuffer.size() * sizeof(frame);
-        std::cout << "Buffer contains " << this->_frameBuffer.size() << " elements at " << bufferSize << " bytes";
-
-        // emit valueChanged(QString::fromUtf8(userReadable.str().c_str()));
-    }
+    };
 
     this->_mutex.lock();
     _working = false;
     this->_mutex.unlock();
 
     qDebug()<<"Worker process finished in Thread "<<thread()->currentThreadId();
-
     emit finished();
 }

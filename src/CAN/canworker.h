@@ -16,14 +16,14 @@ public:
     void abort();
     int joinCanNetwork();
     void shutdown();
-    std::vector<can_frame> getBuffer();
+    std::vector<canfd_frame> getBuffer();
 
 private:
     bool _abort;
     bool _working;
     QMutex _mutex;
     Candy *_candy;
-    std::vector<can_frame> _frameBuffer;
+    std::vector<canfd_frame> _frameBuffer;
 
 signals:
     void workRequested();

@@ -24,5 +24,6 @@ private:
     CanQueue* canQueue;
     void remoteConnection(CanQueue *, nlohmann::json);
     boost::thread_group connectionThreads;
+    void dataPusher(int);
 
 };

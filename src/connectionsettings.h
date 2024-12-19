@@ -17,7 +17,7 @@ signals:
     void createConnection(std::string, std::string);
 
 public:
-    explicit ConnectionSettings(QWidget *parent = nullptr);
+    explicit ConnectionSettings();
     ~ConnectionSettings();
     void updateStatus(char*);
 

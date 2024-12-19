@@ -4,8 +4,8 @@
 #include <iostream>
 #include <QThread>
 
-ConnectionSettings::ConnectionSettings(QWidget *parent)
-    : QDialog(parent)
+ConnectionSettings::ConnectionSettings()
+    : QDialog(nullptr)
     , ui(new Ui::ConnectionSettings)
 {
     ui->setupUi(this);

@@ -6,11 +6,12 @@
 
 class CanQueue {
 public:
-    void add(can_frame);
-    can_frame next();
+    void add(canfd_frame);
+    canfd_frame next();
     bool hasNext();
-    std::list<can_frame> getQueue();
+    std::list<canfd_frame> getQueue();
+    int getBufferSize();
 private:
-    std::list<can_frame> _queue;
+    std::list<canfd_frame> _queue;
     std::mutex _lock;
 };

@@ -15,20 +15,24 @@ bool CanQueue::hasNext() {
     return true;
 };
 
-can_frame CanQueue::next() {
+canfd_frame CanQueue::next() {
     this->_lock.lock();
-    can_frame frame = (can_frame) this->_queue.front();
+    canfd_frame frame = (canfd_frame) this->_queue.front();
     this->_queue.pop_front();
     this->_lock.unlock();
     return frame;
 };
 
-void CanQueue::add(can_frame frame) {
+void CanQueue::add(canfd_frame frame) {
     this->_lock.lock();
     this->_queue.push_back(frame);
     this->_lock.unlock();
 };
 
-std::list<can_frame> CanQueue::getQueue() {
+std::list<canfd_frame> CanQueue::getQueue() {
     return this->_queue;
+};
+
+int CanQueue::getBufferSize() {
+    return sizeof(canfd_frame) * this->_queue.size();
 };
