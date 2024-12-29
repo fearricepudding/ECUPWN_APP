@@ -25,7 +25,7 @@ private slots:
     void exit_app();
     void lookup_code();
     void treeItemClicked(QTreeWidgetItem*, int);
-    void createConnection(std::string, std::string);
+    void createConnection(std::string, std::string, std::string);
 
 signals:
     void updateConnectionPage(nlohmann::json);

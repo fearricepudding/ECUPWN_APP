@@ -14,7 +14,7 @@ private slots:
     void createConnection();
 
 signals:
-    void createConnection(std::string, std::string);
+    void createConnection(std::string, std::string, std::string);
 
 public:
     explicit ConnectionSettings();

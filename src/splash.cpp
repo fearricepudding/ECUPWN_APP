@@ -164,7 +164,7 @@ void Splash::setupPages(){
     };
 
     ConnectionSettings* connPage = new ConnectionSettings;
-    connect(connPage, SIGNAL(createConnection(std::string, std::string)), this, SLOT(createConnection(std::string, std::string)));
+    connect(connPage, SIGNAL(createConnection(std::string, std::string, std::string)), this, SLOT(createConnection(std::string, std::string, std::string)));
     this->addPage("Connections", "Create connection", connPage);
 
     CanLogger *logPage = new CanLogger(&this->_canQueue);
@@ -187,12 +187,12 @@ void Splash::lookup_code(){
     lookupWindow->show();
 }
 
-void Splash::createConnection(std::string ip, std::string port) {
+void Splash::createConnection(std::string name, std::string ip, std::string port) {
     std::cout << "Creating connection for: " << ip << " : " << port << std::endl;
     nlohmann::json newConnection;
     newConnection["ip"] = ip;
     newConnection["port"] = port;
-    newConnection["name"] = "connection name";
+    newConnection["name"] = name;
 
     nlohmann::json connections = this->state["connections"];
     connections.push_back(newConnection);

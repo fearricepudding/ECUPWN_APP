@@ -23,7 +23,8 @@ void ConnectionSettings::updateStatus(char* status){
 }
 
 void ConnectionSettings::createConnection(){
+    std::string name = ui->name->text().toStdString();
     std::string ip = ui->ip->text().toStdString();
     std::string port = ui->port->text().toStdString();
-    emit(createConnection(ip, port));
+    emit(createConnection(name, ip, port));
 }

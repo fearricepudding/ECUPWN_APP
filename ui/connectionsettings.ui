@@ -31,6 +31,16 @@
       </layout>
      </item>
      <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Connection name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="name"/>
+     </item>
+     <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>IP</string>

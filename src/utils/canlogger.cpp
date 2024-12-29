@@ -51,19 +51,23 @@ void CanLogger::renderCanLogs(){
         return;
     };
     for (int i = 0; i < 100; i++) { 
+        if (copy.empty()) {
+            break;
+        };
         canfd_frame frame = copy.back();
-        copy.pop_back();
 
         std::stringstream frameString;
         frameString << std::hex << std::setw(2) << frame.can_id << " = ";
         frameString << uint8_to_hex_string(frame.data, 8);
            
         std::string framestdString = frameString.str();
-        // std::cout << framestdString << std::endl;
         QString frameQ = QString::fromStdString(framestdString);
         QLabel *newLabel = new QLabel();
         newLabel->setText(frameQ);
         ui->log_container->widget()->layout()->addWidget(newLabel);
+
+        copy.pop_back();
+
     };
 
     int count = copy.size();

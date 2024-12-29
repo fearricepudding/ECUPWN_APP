@@ -1,6 +1,7 @@
 #include "ConnectionManager.h"
 #include "../../include/json.hpp"
 #include "CanQueue.h"
+#include "../udp_listener.h"
 
 #include <iostream>
 #include <QObject>
@@ -34,13 +35,17 @@ void ConnectionManager::joinAll() {
 };
 
 void ConnectionManager::remoteConnection(CanQueue*queue, nlohmann::json connection) {
-    std::cout << "Creating remove connection" << std::endl;
+    std::cout << "Creating remtve connection" << std::endl;
+    std::string ip = connection["ip"];
+    std::string port = connection["port"];
+    udp_listener *listener = new udp_listener(ip, port);
+    listener->setup();
     while(true) {
-        // Get the new data from connection for *refreshRate* time
-        canfd_frame frame;
-        queue->add(frame);
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(4)); 
+        canfd_frame newFrame = listener->recieve();
+        std::cout << "[*] New frame: sending to queue" << std::endl;
+        queue->add(newFrame);
     };
+    return;
 };
 
 void ConnectionManager::dataPusher(int rate) {
