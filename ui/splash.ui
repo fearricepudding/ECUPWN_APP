@@ -48,7 +48,8 @@
        <widget class="QPushButton" name="connectBtn">
         <property name="styleSheet">
          <string notr="true">*[connected=&quot;0&quot;]{	background: red; }
-*[connected=&quot;1&quot;]{	background: green; }</string>
+*[connected=&quot;1&quot;]{	background: blue; }
+*[connected=&quot;2&quot;]{  background:green;}</string>
         </property>
         <property name="text">
          <string>DISCONNECTED</string>

@@ -24,6 +24,8 @@ Splash::Splash(QWidget *parent)
     ui->setupUi(this);
 
     this->conManager = new ConnectionManager(&_canQueue);
+    connect(this->conManager, SIGNAL(connStatusChanged(int)), this, SLOT(updateConnectionStatus(int)));
+    connect(this->ui->connectBtn, SIGNAL(clicked()), this->conManager, SLOT(disconnect()));
     this->navCount = 0;
 
     connect(ui->exit, SIGNAL(clicked()), this, SLOT(exit_app()));
@@ -200,3 +202,27 @@ void Splash::createConnection(std::string name, std::string ip, std::string port
     this->saveState();
     this->updateNavigation();
 };
+
+/**
+ * Valid states: 
+ *          0 = disconnected
+ *          1 = connecting/loading
+ *          2 = connected
+ */
+void Splash::updateConnectionStatus(int state) {
+    const char* newState = std::to_string(state).c_str();
+    std::cout << "Changing state: " << newState << std::endl;
+    QPushButton* target = this->ui->connectBtn;
+    target->setProperty("connected", newState);
+    if (state == 0) {
+        target->setText("DISCONNECTED");
+    } else if (state == 1) {
+        target->setText("WORKING");
+    } else if (state == 2) {
+        target->setText("CONNECTED");
+    } else {
+        target->setText("Error");
+    };
+    target->style()->unpolish(target);
+    target->style()->polish(target); 
+}

@@ -12,6 +12,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <linux/can.h>
+#include <sys/poll.h>
 
 
 void *get_in_addr(struct sockaddr *sa)
@@ -78,11 +79,25 @@ canfd_frame udp_listener::recieve() {
     int numbytes;
 
     canfd_frame newframe;
-    if ((numbytes = recv(sockfd, &newframe, sizeof(canfd_frame), 0)) == -1) {
-        perror("recv");
-        exit(1);
-    };
 
+    struct pollfd ufds[1];
+    ufds[0].fd = sockfd;
+    ufds[0].events = POLLIN;
+
+    rv = poll(ufds, 1, 2000);
+    if (rv == -1) {
+        // error with poll
+        std::cout << "Error with poll" << std::endl;
+        exit(1);
+    } else if (rv == 0) {
+        // Timeout no data
+        std::cout << "timeout" << std::endl;
+    } else {
+        if ((numbytes = recv(sockfd, &newframe, sizeof(canfd_frame), 0)) == -1) {
+            perror("recv");
+            exit(1);
+        };
+    };
     return newframe;
 };
 
